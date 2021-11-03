@@ -2,24 +2,13 @@ library(readr)
 library(here)
 
 #Importando a planilha da spp T. bandeira
-bandeira <- readr::read_csv(here::here("00_dadosbrutos", 'tamandua_bandeira.csv.csv'))
-bandeira
+dados_tamandua <- readr::read_csv(here::here("00_dadosbrutos", 'tamanduas.csv'))
+dados_tamandua
 
-#Importando a planilha das duas especies
-xen_spp <- readr::read_csv(here::here("00_dadosbrutos", 'tamanduas.csv.csv'))
-xen_spp
 
 # nº de indivídiuos por habitat
-# Abundancia da spp. bandeira
-bandeira |>  
-  ggplot2::ggplot(ggplot2::aes(y=habitat))+
-  ggplot2::geom_bar()+
-  ggplot2::theme_classic()+
-  ggplot2::xlab(label = 'Abundância')+
-  ggplot2::ylab(label= 'Habitat')
-
 # Abundancia das duas spp.
-xen_spp |>  
+dados_tamandua |>  
   ggplot2::ggplot(ggplot2::aes(y=habitat))+
   ggplot2::geom_bar()+
   ggplot2::theme_classic()+
