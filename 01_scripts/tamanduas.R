@@ -18,7 +18,7 @@ library(ggplot2)
 library(geobr)
 library(dplyr)
 library(tidyverse)
-
+library(tmap)
 #===============================================================================
 
 #Importando os dados de ocorrencia das spp
@@ -103,7 +103,7 @@ dados_tamandua_sf
 tm_shape(biom_2019) +
   tm_polygons(col = "name_biome", pal = viridis::viridis(6)) +
   tm_shape(dados_tamandua_sf) +
-  tm_bubbles(size = .05, col = "SPECIES", pal = c("cyan4", "purple")) +
+  tm_bubbles(size = .06, col = "SPECIES", pal = c("cyan4", "purple")) +
   # tm_facets(along = "year", free.coords = FALSE) +
   tm_layout(legend.position = c("left", "bottom")) +
   tm_compass() +
