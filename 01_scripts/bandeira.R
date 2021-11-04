@@ -16,6 +16,7 @@ library(readr)
 library(here)
 library(ggplot2)
 
+
 #Importando os dados de ocorrencia das spp
 dados_tamandua <- readr::read_csv(here::here("00_dadosbrutos", 'tamanduas.csv'))
 dados_tamandua
