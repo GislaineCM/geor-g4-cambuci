@@ -29,29 +29,37 @@ dados_tamandua
 # Número de indivídiuos total por habitat
 # Abundancia das duas spp.
 
+dir.create(here::here("03_graficos"))
+png(filename = here::here("03_graficos", "graf_indiv_habit.png"),
+    width = 20, height = 20, units = "cm", res = 300)
 dados_tamandua |>  
   ggplot2::ggplot(ggplot2::aes(y=habitat))+
   ggplot2::geom_bar()+
   ggplot2::theme_classic()+
   ggplot2::xlab(label = 'Abundância')+
   ggplot2::ylab(label= 'Habitat')
-
+dev.off()
 #===============================================================================
 
 # PLOT 2
 # Número de indivídiuos de cada espécie por habitat
 # Abundancia de cada spp.
 
+png(filename = here::here("03_graficos", "graf_indiv_habit2.png"),
+    width = 20, height = 20, units = "cm", res = 300)
 dados_tamandua |>  
   ggplot2::ggplot(ggplot2::aes(y=habitat,fill=specie))+
   ggplot2::geom_bar(position='dodge')+
   ggplot2::theme_classic()+
   ggplot2::xlab(label = 'Abundância')+
   ggplot2::ylab(label= 'Habitat')
-
+dev.off()
 #==============================================================================
 # PLOT 3
 ## Variação temporal da Abundancia das duas spp.por habitat
+
+png(filename = here::here("03_graficos", "graf_abund_tempo.png"),
+    width = 30, height = 20, units = "cm", res = 300)
 dados_tamandua |>  
   dplyr::filter(year>2008)|>
   ggplot2::ggplot(ggplot2::aes(y=habitat,fill=specie))+
@@ -60,7 +68,25 @@ dados_tamandua |>
   ggplot2::theme_classic()+
   ggplot2::xlab(label = 'Abundância')+
   ggplot2::ylab(label= 'Habitat')
+dev.off()
 #===============================================================================
+
+#############
+# Criando e exportando mapa de registros para os biomas brasileiros
+png(filename = here::here("02_mapas", "map_tamandua_bioma.png"),
+    width = 20, height = 20, units = "cm", res = 300)
+tm_shape(biom_2019) +
+  tm_polygons(col = "name_biome", pal = viridis::viridis(6)) +
+  tm_shape(dados_tamandua_sf) +
+  tm_bubbles(size = .06, col = "SPECIES", pal = c("cyan4", "purple")) +
+  # tm_facets(along = "year", free.coords = FALSE) +
+  tm_layout(legend.position = c("left", "bottom")) +
+  tm_compass() +
+  tm_scale_bar() +
+  tm_graticules(lines = FALSE)
+dev.off()
+#############
+
 
 ## PLOT 4
 # Dispersão spp. no Brasil
@@ -99,22 +125,6 @@ dados_tamandua_sf <- dados_tamandua2 %>%
   sf::st_as_sf(coords = c("LONG_X", "LAT_Y"), crs = 4326) %>% 
   .[biom_2019, ]
 dados_tamandua_sf
-
-tm_shape(biom_2019) +
-  tm_polygons(col = "name_biome", pal = viridis::viridis(6)) +
-  tm_shape(dados_tamandua_sf) +
-  tm_bubbles(size = .06, col = "SPECIES", pal = c("cyan4", "purple")) +
-  # tm_facets(along = "year", free.coords = FALSE) +
-  tm_layout(legend.position = c("left", "bottom")) +
-  tm_compass() +
-  tm_scale_bar() +
-  tm_graticules(lines = FALSE)
-
-
-# Exportando como imagem
-tmap::tm_shape(tm = map_tamandua_biomas, 
-                     filename = here::here("02_mapas", "mapa_dem_rc_tmap_ani.gif"), 
-                     delay = 30)
 
 
 dados_tamandua2 |> 
