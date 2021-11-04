@@ -12,7 +12,6 @@
   
 
 # Carregando os pacotes necessários
-install.packages("dplyr")
 library(readr)
 library(here)
 library(ggplot2)
@@ -62,24 +61,13 @@ dados_tamandua |>
 ## PLOT 4
 # Dispersão spp. no Brasil
 
-###csv original quantitativo
-#dados_tamandua2 <- list.files(pattern = 'QUANTITATIVE.csv')
-#dados_tamandua2 <- read.csv(dados_tamandua2)
-
-#dados_tamandua2 |> 
-  #dplyr::filter(SPECIES == "Myrmecophaga tridactyla" | SPECIES == "Tamandua tetradactyla")|> 
-  #ggplot2::ggplot(ggplot2::aes(x=as.numeric(LONG_X), y=as.numeric(LAT_Y),color=SPECIES))+
-  #ggplot2::geom_point()+
-  #ggplot2::xlab(label = "Longitude")+
-  #ggplot2::ylab(label="Latitude")
-
 
 ###csv original qualitativo
  
-dados_tamandua3 <- list.files(pattern = 'QUALITATIVE.csv')
-dados_tamandua3 <- read.csv(dados_tamandua3,sep=';')
+dados_tamandua2 <- list.files(pattern = 'QUALITATIVE.csv')
+dados_tamandua2 <- read.csv(dados_tamandua2,sep=';')
 
-dados_tamandua3 |> 
+dados_tamandua2 |> 
   dplyr::filter(COUNTRY=='BRAZIL'& SPECIES == "Myrmecophaga tridactyla" | SPECIES == "Tamandua tetradactyla")|> 
   ggplot2::ggplot(ggplot2::aes(x=as.numeric(LONG_X), y=as.numeric(LAT_Y),color=SPECIES))+
   ggplot2::geom_point()+
