@@ -77,3 +77,14 @@ dados_tamandua2 |>
   ggplot2::ylim(-40,10)
 
 
+###csv original quantitativo
+dados_tamandua3 <- list.files(pattern = 'QUANTITATIVE.csv')
+dados_tamandua3 <- read.csv(dados_tamandua3)
+
+#dados_tamandua3 |> 
+#dplyr::filter(SPECIES == "Myrmecophaga tridactyla" | SPECIES == "Tamandua tetradactyla")|> 
+#ggplot2::ggplot(ggplot2::aes(x=as.numeric(LONG_X), y=as.numeric(LAT_Y),color=SPECIES))+
+#ggplot2::geom_point()+
+#ggplot2::xlab(label = "Longitude")+
+#ggplot2::ylab(label="Latitude")
+
