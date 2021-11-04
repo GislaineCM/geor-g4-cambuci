@@ -17,11 +17,12 @@ library(here)
 library(ggplot2)
 library(geobr)
 library(dplyr)
+library(tidyverse)
 
 #===============================================================================
 
 #Importando os dados de ocorrencia das spp
-dados_tamandua <- readr::read_csv(here::here("00_dadosbrutos", 'tamanduas.csv'))
+dados_tamandua <- readr::read_csv(file = "00_dadosbrutos/tamanduas.csv")
 dados_tamandua
 
 #PLOT 1
@@ -34,6 +35,7 @@ dados_tamandua |>
   ggplot2::theme_classic()+
   ggplot2::xlab(label = 'Abundância')+
   ggplot2::ylab(label= 'Habitat')
+
 #===============================================================================
 
 # PLOT 2
@@ -76,7 +78,9 @@ plot(br_2020$geom)
 
 
 # Dados Biomas do Brasil IBGE para 2019
-biom_2019 <- read_biomes(year = 2019, simplified = TRUE)
+biom_2019 <- read_biomes(year = 2019, simplified = TRUE) %>% 
+  filter(name_biome != "Sistema Costeiro") %>% 
+  sf::st_transform(crs = 4326)
 biom_2019
 plot(biom_2019$geom, col = c("darkgreen", "orange", "orange4",
                              "forestgreen", "yellow", "yellow3"),
@@ -86,6 +90,25 @@ plot(biom_2019$geom, col = c("darkgreen", "orange", "orange4",
 
 plot(br_2020$geom, col = "gray", main = NA, axes = TRUE, graticule = TRUE)
 #plot(dados_tamandua2$geometry, pch = 20, add = TRUE)
+
+dados_tamandua_sf <- dados_tamandua2 %>% 
+  dplyr::filter(COUNTRY=='BRAZIL'& SPECIES == "Myrmecophaga tridactyla" | SPECIES == "Tamandua tetradactyla") %>% 
+  tidyr::drop_na(LONG_X, LAT_Y) %>% 
+  dplyr::mutate(lon = as.numeric(LONG_X), lat = as.numeric(LAT_Y)) %>% 
+  dplyr::filter(lon > -180 & lon < 180, lat > -90, lat < 90) %>% 
+  sf::st_as_sf(coords = c("LONG_X", "LAT_Y"), crs = 4326) %>% 
+  .[biom_2019, ]
+dados_tamandua_sf
+
+tm_shape(biom_2019) +
+  tm_polygons(col = "name_biome", pal = viridis::viridis(6)) +
+  tm_shape(dados_tamandua_sf) +
+  tm_bubbles(size = .05, col = "SPECIES", pal = c("cyan4", "purple")) +
+  # tm_facets(along = "year", free.coords = FALSE) +
+  tm_layout(legend.position = c("left", "bottom")) +
+  tm_compass() +
+  tm_scale_bar() +
+  tm_graticules(lines = FALSE)
 
 
 dados_tamandua2 |> 
