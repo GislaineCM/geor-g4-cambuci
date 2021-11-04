@@ -111,6 +111,12 @@ tm_shape(biom_2019) +
   tm_graticules(lines = FALSE)
 
 
+# Exportando como imagem
+tmap::tm_shape(tm = map_tamandua_biomas, 
+                     filename = here::here("02_mapas", "mapa_dem_rc_tmap_ani.gif"), 
+                     delay = 30)
+
+
 dados_tamandua2 |> 
   dplyr::filter(COUNTRY=='BRAZIL'& SPECIES == "Myrmecophaga tridactyla" | SPECIES == "Tamandua tetradactyla")|> 
   ggplot2::ggplot(ggplot2::aes(x=as.numeric(LONG_X), y=as.numeric(LAT_Y),color=SPECIES))+
@@ -119,6 +125,8 @@ dados_tamandua2 |>
   ggplot2::ylab(label="Latitude")+
   ggplot2::xlim(-80,-30)+
   ggplot2::ylim(-40,10)
+
+
 
 
 ###csv original quantitativo
