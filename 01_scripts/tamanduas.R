@@ -77,6 +77,23 @@ dev.off()
 
 # MAPA 1
 ## Criando e exportando mapa de registros para os biomas brasileiros
+# Dados Biomas do Brasil IBGE para 2019
+dados_tamandua_sf <- dados_tamandua2 %>% 
+  dplyr::filter(COUNTRY=='BRAZIL'& SPECIES == "Myrmecophaga tridactyla" | SPECIES == "Tamandua tetradactyla") %>% 
+  tidyr::drop_na(LONG_X, LAT_Y) %>% 
+  dplyr::mutate(lon = as.numeric(LONG_X), lat = as.numeric(LAT_Y)) %>% 
+  dplyr::filter(lon > -180 & lon < 180, lat > -90, lat < 90) %>% 
+  sf::st_as_sf(coords = c("LONG_X", "LAT_Y"), crs = 4326) %>% 
+  .[biom_2019, ]
+dados_tamandua_sf
+
+
+biom_2019 <- read_biomes(year = 2019, simplified = TRUE) %>% 
+  filter(name_biome != "Sistema Costeiro") %>% 
+  sf::st_transform(crs = 4326)
+biom_2019
+
+
 png(filename = here::here("02_mapas", "map_tamandua_bioma.png"),
     width = 20, height = 20, units = "cm", res = 300)
 tm_shape(biom_2019) +
@@ -90,8 +107,8 @@ tm_shape(biom_2019) +
   tm_graticules(lines = FALSE)
 dev.off()
 #############
-
-
+#############
+#############
 
 
 ## PLOT 4
@@ -101,34 +118,9 @@ dev.off()
 dados_tamandua2 <- list.files(pattern = 'QUALITATIVE.csv')
 dados_tamandua2 <- read.csv(dados_tamandua2,sep=';')
 
-# Dados Estados do Brasil IBGE para 2020
-br_2020 <- read_country(year = 2020, simplified = TRUE)
-br_2020
-plot(br_2020$geom)
-
-
-# Dados Biomas do Brasil IBGE para 2019
-biom_2019 <- read_biomes(year = 2019, simplified = TRUE) %>% 
-  filter(name_biome != "Sistema Costeiro") %>% 
-  sf::st_transform(crs = 4326)
-biom_2019
-plot(biom_2019$geom, col = c("darkgreen", "orange", "orange4",
-                             "forestgreen", "yellow", "yellow3"),
-     main = "Biomas do Brasil", axes = TRUE,
-     graticule = TRUE)
-
 
 plot(br_2020$geom, col = "gray", main = NA, axes = TRUE, graticule = TRUE)
 #plot(dados_tamandua2$geometry, pch = 20, add = TRUE)
-
-dados_tamandua_sf <- dados_tamandua2 %>% 
-  dplyr::filter(COUNTRY=='BRAZIL'& SPECIES == "Myrmecophaga tridactyla" | SPECIES == "Tamandua tetradactyla") %>% 
-  tidyr::drop_na(LONG_X, LAT_Y) %>% 
-  dplyr::mutate(lon = as.numeric(LONG_X), lat = as.numeric(LAT_Y)) %>% 
-  dplyr::filter(lon > -180 & lon < 180, lat > -90, lat < 90) %>% 
-  sf::st_as_sf(coords = c("LONG_X", "LAT_Y"), crs = 4326) %>% 
-  .[biom_2019, ]
-dados_tamandua_sf
 
 
 dados_tamandua2 |> 
@@ -139,8 +131,6 @@ dados_tamandua2 |>
   ggplot2::ylab(label="Latitude")+
   ggplot2::xlim(-80,-30)+
   ggplot2::ylim(-40,10)
-
-
 
 
 ###csv original quantitativo
