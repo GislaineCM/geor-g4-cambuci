@@ -19,6 +19,11 @@ library(geobr)
 library(dplyr)
 library(tidyverse)
 library(tmap)
+
+#Pacote de cor
+install.packages("RColorBrewer")
+library(RColorBrewer)
+
 #===============================================================================
 
 #Importando os dados de ocorrencia das spp
@@ -82,6 +87,12 @@ dados_tamandua2 <- list.files(pattern = 'QUALITATIVE.csv')
 dados_tamandua2 <- read.csv(dados_tamandua2,sep=';')
 
 
+biom_2019 <- read_biomes(year = 2019, simplified = TRUE) %>% 
+  filter(name_biome != "Sistema Costeiro") %>% 
+  sf::st_transform(crs = 4326)
+biom_2019
+
+
 dados_tamandua_sf <- dados_tamandua2 %>% 
   dplyr::filter(COUNTRY=='BRAZIL'& SPECIES == "Myrmecophaga tridactyla" | SPECIES == "Tamandua tetradactyla") %>% 
   tidyr::drop_na(LONG_X, LAT_Y) %>% 
@@ -92,34 +103,69 @@ dados_tamandua_sf <- dados_tamandua2 %>%
 dados_tamandua_sf
 
 
-biom_2019 <- read_biomes(year = 2019, simplified = TRUE) %>% 
-  filter(name_biome != "Sistema Costeiro") %>% 
-  sf::st_transform(crs = 4326)
-biom_2019
+#Selecionando a cor do mapa e criando um objeto para ela
+pastel <- brewer.pal(10, "Pastel1")
 
-
+#Mapa do Maurício
 png(filename = here::here("02_mapas", "map_tamandua_bioma.png"),
     width = 20, height = 20, units = "cm", res = 300)
 tm_shape(biom_2019) +
+  tm_polygons(col = "name_biome", pal = pastel) +
+  tm_shape(dados_tamandua_sf) +
+  tm_bubbles(size = .058, col = "SPECIES", pal = c("blue", "red"), shape = 21) +
+  # tm_facets(along = "year", free.coords = FALSE) +
+  tm_layout(legend.position = c("left", "bottom"),
+            legend.height = 0.45,
+            legend.bg.color = "white",
+            legend.frame = T,
+            legend.frame.lwd = 2,
+            bg.color = "antiquewhite",
+            main.title = "Coloque um título aqui ;)",
+            main.title.position = "center",
+            main.title.size = 1.5,
+  ) +
+  tm_compass(position = c("right", "top"), type = "4star", size = 3, show.labels = 2) +
+  tm_scale_bar(text.size = 0.8) +
+  # tm_grid(ticks = (labels.show = TRUE))
+  tm_graticules(ticks = (labels.show = TRUE))
+dev.off()
+
+
+#==============================================================================
+
+# MAPA 2
+# Mapa animado p/ mostrar variação na abundância ao longo dos anos de registros
+
+map_anim_tempo <-  tm_shape(biom_2019) +
   tm_polygons(col = "name_biome", pal = viridis::viridis(6)) +
   tm_shape(dados_tamandua_sf) +
   tm_bubbles(size = .06, col = "SPECIES", pal = c("cyan4", "purple")) +
-  # tm_facets(along = "year", free.coords = FALSE) +
+  tm_facets(along = "COL_STRT_YR", free.coords = FALSE)+
   tm_layout(legend.position = c("left", "bottom")) +
   tm_compass() +
   tm_scale_bar() +
   tm_graticules(lines = FALSE)
-dev.off()
 
-#############
-#############
-#############
+
+tmap::tmap_animation(tm = map_anim_tempo, 
+                     filename = here::here("03_dados", "mapas", "map_anim_tempo.gif"), 
+                     delay = 30)
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
 
 
 ## PLOT 4
 # Dispersão spp. no Brasil
 ###csv original qualitativo
- 
+
 
 
 
@@ -147,4 +193,5 @@ dados_tamandua3 <- read.csv(dados_tamandua3)
 #ggplot2::geom_point()+
 #ggplot2::xlab(label = "Longitude")+
 #ggplot2::ylab(label="Latitude")
+
 
