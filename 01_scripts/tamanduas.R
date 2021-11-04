@@ -11,12 +11,14 @@
   # OBJETIVO: 
   
 
-# Carregando os pacotes necessários
+# Carregando os pacotes necessarios
 library(readr)
 library(here)
 library(ggplot2)
-#library(dplyr)
-================================================================================
+library(geobr)
+library(dplyr)
+
+#===============================================================================
 
 #Importando os dados de ocorrencia das spp
 dados_tamandua <- readr::read_csv(here::here("00_dadosbrutos", 'tamanduas.csv'))
@@ -32,7 +34,7 @@ dados_tamandua |>
   ggplot2::theme_classic()+
   ggplot2::xlab(label = 'Abundância')+
   ggplot2::ylab(label= 'Habitat')
-================================================================================
+#===============================================================================
 
 # PLOT 2
 # Número de indivídiuos de cada espécie por habitat
@@ -45,7 +47,7 @@ dados_tamandua |>
   ggplot2::xlab(label = 'Abundância')+
   ggplot2::ylab(label= 'Habitat')
 
-===============================================================================
+#==============================================================================
 # PLOT 3
 ## Variação temporal da Abundancia das duas spp.por habitat
 dados_tamandua |>  
@@ -56,7 +58,7 @@ dados_tamandua |>
   ggplot2::theme_classic()+
   ggplot2::xlab(label = 'Abundância')+
   ggplot2::ylab(label= 'Habitat')
-================================================================================
+#===============================================================================
 
 ## PLOT 4
 # Dispersão spp. no Brasil
@@ -66,6 +68,19 @@ dados_tamandua |>
  
 dados_tamandua2 <- list.files(pattern = 'QUALITATIVE.csv')
 dados_tamandua2 <- read.csv(dados_tamandua2,sep=';')
+
+# Dados Estados do Brasil IBGE para 2020
+br_2020 <- read_country(year = 2020, simplified = TRUE)
+br_2020
+plot(br_2020$geom)
+
+
+# Dados Biomas do Brasil IBGE para 2019
+biom_2019 <- read_biomes(year = 2019, simplified = TRUE)
+biom_2019
+plot(biom_2019$geom)
+plot(dados_tamandua2$geometry)
+
 
 dados_tamandua2 |> 
   dplyr::filter(COUNTRY=='BRAZIL'& SPECIES == "Myrmecophaga tridactyla" | SPECIES == "Tamandua tetradactyla")|> 
