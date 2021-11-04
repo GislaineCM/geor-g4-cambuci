@@ -79,7 +79,9 @@ plot(br_2020$geom)
 biom_2019 <- read_biomes(year = 2019, simplified = TRUE)
 biom_2019
 plot(biom_2019$geom)
-plot(dados_tamandua2$geometry)
+
+plot(br_2020$geom, col = "gray", main = NA, axes = TRUE, graticule = TRUE)
+#plot(dados_tamandua2$geometry, pch = 20, add = TRUE)
 
 
 dados_tamandua2 |> 
