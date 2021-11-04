@@ -29,7 +29,7 @@ dados_tamandua
 # Número de indivídiuos total por habitat
 # Abundancia das duas spp.
 
-dir.create(here::here("03_graficos"))
+#dir.create(here::here("03_graficos"))
 png(filename = here::here("03_graficos", "graf_indiv_habit.png"),
     width = 20, height = 20, units = "cm", res = 300)
 dados_tamandua |>  
@@ -39,6 +39,7 @@ dados_tamandua |>
   ggplot2::xlab(label = 'Abundância')+
   ggplot2::ylab(label= 'Habitat')
 dev.off()
+
 #===============================================================================
 
 # PLOT 2
@@ -54,7 +55,9 @@ dados_tamandua |>
   ggplot2::xlab(label = 'Abundância')+
   ggplot2::ylab(label= 'Habitat')
 dev.off()
+
 #==============================================================================
+
 # PLOT 3
 ## Variação temporal da Abundancia das duas spp.por habitat
 
@@ -69,10 +72,11 @@ dados_tamandua |>
   ggplot2::xlab(label = 'Abundância')+
   ggplot2::ylab(label= 'Habitat')
 dev.off()
+
 #===============================================================================
 
-#############
-# Criando e exportando mapa de registros para os biomas brasileiros
+# MAPA 1
+## Criando e exportando mapa de registros para os biomas brasileiros
 png(filename = here::here("02_mapas", "map_tamandua_bioma.png"),
     width = 20, height = 20, units = "cm", res = 300)
 tm_shape(biom_2019) +
@@ -88,10 +92,10 @@ dev.off()
 #############
 
 
+
+
 ## PLOT 4
 # Dispersão spp. no Brasil
-
-
 ###csv original qualitativo
  
 dados_tamandua2 <- list.files(pattern = 'QUALITATIVE.csv')
