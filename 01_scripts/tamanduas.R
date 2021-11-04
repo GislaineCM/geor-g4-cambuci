@@ -78,6 +78,10 @@ dev.off()
 # MAPA 1
 ## Criando e exportando mapa de registros para os biomas brasileiros
 # Dados Biomas do Brasil IBGE para 2019
+dados_tamandua2 <- list.files(pattern = 'QUALITATIVE.csv')
+dados_tamandua2 <- read.csv(dados_tamandua2,sep=';')
+
+
 dados_tamandua_sf <- dados_tamandua2 %>% 
   dplyr::filter(COUNTRY=='BRAZIL'& SPECIES == "Myrmecophaga tridactyla" | SPECIES == "Tamandua tetradactyla") %>% 
   tidyr::drop_na(LONG_X, LAT_Y) %>% 
@@ -106,6 +110,7 @@ tm_shape(biom_2019) +
   tm_scale_bar() +
   tm_graticules(lines = FALSE)
 dev.off()
+
 #############
 #############
 #############
@@ -115,8 +120,7 @@ dev.off()
 # Dispersão spp. no Brasil
 ###csv original qualitativo
  
-dados_tamandua2 <- list.files(pattern = 'QUALITATIVE.csv')
-dados_tamandua2 <- read.csv(dados_tamandua2,sep=';')
+
 
 
 plot(br_2020$geom, col = "gray", main = NA, axes = TRUE, graticule = TRUE)
