@@ -21,7 +21,7 @@ library(tidyverse)
 library(tmap)
 
 #Pacote de cor
-install.packages("RColorBrewer")
+#install.packages("RColorBrewer")
 library(RColorBrewer)
 
 #===============================================================================
@@ -120,7 +120,7 @@ tm_shape(biom_2019) +
             legend.frame = T,
             legend.frame.lwd = 2,
             bg.color = "antiquewhite",
-            main.title = "Coloque um título aqui ;)",
+            main.title = "Registros de duas espécies de tamanduá nos biomas brasileiros",
             main.title.position = "center",
             main.title.size = 1.5,
   ) +
@@ -156,42 +156,3 @@ tmap::tmap_animation(tm = map_anim_tempo,
 #'
 #'
 #'
-#'
-#'
-#'
-#'
-
-
-## PLOT 4
-# Dispersão spp. no Brasil
-###csv original qualitativo
-
-
-
-
-plot(br_2020$geom, col = "gray", main = NA, axes = TRUE, graticule = TRUE)
-#plot(dados_tamandua2$geometry, pch = 20, add = TRUE)
-
-
-dados_tamandua2 |> 
-  dplyr::filter(COUNTRY=='BRAZIL'& SPECIES == "Myrmecophaga tridactyla" | SPECIES == "Tamandua tetradactyla")|> 
-  ggplot2::ggplot(ggplot2::aes(x=as.numeric(LONG_X), y=as.numeric(LAT_Y),color=SPECIES))+
-  ggplot2::geom_point()+
-  ggplot2::xlab(label = "Longitude")+
-  ggplot2::ylab(label="Latitude")+
-  ggplot2::xlim(-80,-30)+
-  ggplot2::ylim(-40,10)
-
-
-###csv original quantitativo
-dados_tamandua3 <- list.files(pattern = 'QUANTITATIVE.csv')
-dados_tamandua3 <- read.csv(dados_tamandua3)
-
-#dados_tamandua3 |> 
-#dplyr::filter(SPECIES == "Myrmecophaga tridactyla" | SPECIES == "Tamandua tetradactyla")|> 
-#ggplot2::ggplot(ggplot2::aes(x=as.numeric(LONG_X), y=as.numeric(LAT_Y),color=SPECIES))+
-#ggplot2::geom_point()+
-#ggplot2::xlab(label = "Longitude")+
-#ggplot2::ylab(label="Latitude")
-
-
